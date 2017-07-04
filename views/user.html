@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Регистрация</title>
+    <meta charset="utf-8" />
+</head>
+<body>
+    <h1>Введите данные</h1>
+    <form action="/register" method="post" name="registerForm">
+		<label>id</label></br>
+        <input type="text" name="id" /></br></br>
+        <label>Имя</label></br>
+        <input type="text" name="userName" /></br></br>
+		<label>Фамилия</label></br>
+        <input type="text" name="surName" /></br></br>
+        <label>Возраст</label></br>
+        <input type="number" name="userAge" /></br></br>
+		<input type="submit" set-chanell="insert" name ="insert" value="Вставить" />
+        <input type="submit" set-chanell="update" name ="update" value="Обновить" />
+		<input type="submit" set-chanell="del" name ="del" value="Удалить" />
+    </form>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script>
+$(document).ready(function () {
+var events;
+$(document).on('click','[set-chanell]',function(e){
+    var chanell = $(this).attr('set-chanell');
+	console.log(chanell);
+			   
+	if(chanell === 'update'){
+	events = 'update';
+	}else if(chanell === 'del'){
+	events = 'del';		  
+	}else if(chanell === 'insert'){
+	events = 'insert';
+	}
+});
+        $("form").submit(function(e) {
+         
+            e.preventDefault();
+            var registerForm = document.forms["registerForm"];
+			 var id = registerForm.elements["id"].value;
+            var userName = registerForm.elements["userName"].value;
+			var surName = registerForm.elements["surName"].value;
+            var userAge = registerForm.elements["userAge"].value;
+			
+
+            $.ajax({
+                type: "POST",
+                url: "/user",
+                data: JSON.stringify({events:events, id:id, userName: userName, surName: surName, userAge: userAge}),
+                dataType: "json",
+                contentType: "application/json",
+                success: function(data){ 
+                    console.log(data);
+                    },
+                });
+        });
+});
+    </script>
+</body>
+<html>
